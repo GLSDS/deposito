@@ -21,8 +21,8 @@ public static void main(String[] args) {                            // MPrograma
             System.out.println("║  2 - Vendas                ║");
             System.out.println("║  3 - Sair                  ║");
             System.out.println("╚════════════════════════════╝");
-
             int opcao = sc.nextInt(); 
+
             switch(opcao){ 
                 case 1 -> {
                     boolean sair = produtos();
@@ -31,7 +31,7 @@ public static void main(String[] args) {                            // MPrograma
                         return;
                     }
                 } 
-                case 2 -> mostrarTodosProdutos(); 
+                //case 2 ->  
                 case 3 -> {
                     System.out.println("A sair...");
                     return;
@@ -40,10 +40,6 @@ public static void main(String[] args) {                            // MPrograma
             } 
         } 
     }
-
-   
-
-    
   
     private static void escreveNoFicheiro(String texto, String nomeFicheiro) {                  //subprograma que escreve o texto no ficheiro, para ser usado na função de adicionar texto ao ficheiro
   
@@ -159,6 +155,7 @@ public static void main(String[] args) {                            // MPrograma
             } 
         } 
     } 
+
     private static void mostrarTodosProdutos() {
         Scanner sc = new Scanner(System.in); 
         String nomeFicheiro = "deposito.txt"; 
@@ -177,6 +174,7 @@ public static void main(String[] args) {                            // MPrograma
             System.out.println("Preço: " + preco[i] + "\n"); 
         } 
     } 
+
     private static void editarProduto() {
     Scanner sc = new Scanner(System.in);
     String nomeFicheiro = "deposito.txt";
@@ -288,6 +286,7 @@ public static void main(String[] args) {                            // MPrograma
     escreveNoFicheiro(novoConteudo, nomeFicheiro);
     System.out.println("\n✅ Produto editado com sucesso!");
 }
+
 private static void adicionarMaisProdutos() {                   //subprograma que permite adicionar mais produtos ao ficheiro sem apagar os produtos já existentes, perguntando ao usuário quantos produtos deseja adicionar e repetindo o processo de adição para cada produto
     Scanner sc = new Scanner(System.in);
     System.out.print("Quantos produtos deseja adicionar? ");
@@ -313,8 +312,8 @@ private static void adicionarMaisProdutos() {                   //subprograma qu
     }
     System.out.println(quantidade + " produto(s) adicionado(s) com sucesso!");
 }
-private static void adicionarNovoproduto() { 
 
+private static void registarNovoproduto() { 
         Scanner sc = new Scanner(System.in); 
 
   
@@ -340,8 +339,65 @@ private static void adicionarNovoproduto() {
     } 
                 private static void venderProduto() {
         Scanner sc = new Scanner(System.in);
+        
 
 }
+    private static void buscarProdutoPorNome() {
+    Scanner sc = new Scanner(System.in);
+    String nomeFicheiro = "deposito.txt";
+    
+    int numLinhas = getNumeroLinhasFicheiro(nomeFicheiro);
+    
+    if (numLinhas == 0) {
+        System.out.println("❌ Não existem produtos cadastrados!");
+        return;
+    }
+    
+    String[] nomeProduto = new String[numLinhas];
+    String[] quantidade = new String[numLinhas];
+    String[] qualidade = new String[numLinhas];
+    String[] preco = new String[numLinhas];
+    
+    leExtraiCsvFicheiro(nomeFicheiro, nomeProduto, quantidade, qualidade, preco);
+    
+    System.out.println("Introduza o nome do produto para vender:\n");
+    String nomeBusca = sc.nextLine().toLowerCase();
+    
+    boolean encontrado = false;
+    int contador = 0;
+    
+    System.out.println("\n╔════════════════════════════════════════════════╗");
+    System.out.println("║           RESULTADOS DA BUSCA                  ║");
+    System.out.println("╠════════════════════════════════════════════════╣");
+    
+    for (int i = 0; i < nomeProduto.length; i++) {
+        if (nomeProduto[i].toLowerCase().contains(nomeBusca)) {
+            encontrado = true;
+            contador++;
+            int qtd = Integer.parseInt(quantidade[i]);
+            String status = (qtd > 0) ? "✅ DISPONÍVEL" : "❌ INDISPONÍVEL";
+            
+            System.out.println("║ [" + contador + "] " + nomeProduto[i]);
+            System.out.println("║     Quantidade: " + quantidade[i] + " unidades");
+            System.out.println("║     Status: " + status);
+            System.out.println("║     Preço: R$ " + preco[i]);
+            System.out.println("║     Qualidade: " + qualidade[i]);
+            
+            if (qtd > 0 && qtd < 5) {
+                System.out.println("║     ⚠️  ESTOQUE BAIXO! Restam apenas " + qtd + " unidades");
+            }
+            System.out.println("║────────────────────────────────────────────║");
+        }
+    }
+    
+    if (!encontrado) {
+        System.out.println("║     Nenhum produto encontrado com o nome: " + Color.RED + nomeBusca + Color.RESET);
+    } else {
+        System.out.println("║    📊 Total de produtos encontrados: " + contador);
+    }
+    System.out.println("╚════════════════════════════════════════════════╝");
+}
+
 private static void atualizarEstoque(String nomeProdutoVenda, int quantidadeVendida) {
     String nomeFicheiro = "deposito.txt";
     
@@ -398,21 +454,23 @@ private static boolean produtos(){
                 System.out.println("╔════════════════════════════╗ \n"                  //Tabela das opções dos produtos
                                   +"║      SELECIONE UMA OPÇÃO   ║ \n"
                                   +"╠════════════════════════════╣ \n"
-                                  +"║ 1 - Adicionar produto      ║ \n"
-                                  +"║ 2 - Vender produto         ║ \n"
-                                  +"║ 3 - Mostrar produtos       ║ \n"
-                                  +"║ 4 - Adicionar mais produtos║ \n"
-                                  +"║ 5 - Editar produto         ║ \n"
-                                  +"║ 6 - Sair                   ║ \n"
+                                  +"║ 1 - registra produto       ║ \n"
+                                  +"║ 2 - adicionar produtos     ║ \n"
+                                  +"║ 3 - Vender produto         ║ \n"
+                                  +"║ 4 - Mostrar produtos       ║ \n"
+                                  +"║ 5 - Adicionar mais produtos║ \n"
+                                  +"║ 6 - Editar produto         ║ \n"
+                                  +"║ 7 - Sair                   ║ \n"
                                   +"╚════════════════════════════╝ ");
                 int opcaoProdutos = sc.nextInt();
                 switch(opcaoProdutos){
-                    case 1 -> adicionarNovoproduto();
-                   // case 2 -> 
-                    case 3 -> mostrarTodosProdutos();
-                    case 4 -> adicionarMaisProdutos();
-                    case 5 ->editarProduto();
-                    case 6 -> {   
+                    case 1 -> registarNovoproduto();
+                    case 2 -> adicionarMaisProdutos(); 
+                   // case 3 ->
+                    case 4 -> mostrarTodosProdutos();
+                    case 5 -> adicionarMaisProdutos();
+                    case 6 -> editarProduto();
+                    case 7 -> {   
                         return true;
                     }
                     default -> System.out.println("Opção inválida");
@@ -426,7 +484,21 @@ private static boolean produtos(){
         escreveNoFicheiro(textoNovo, nomeFicheiro); 
 
     } 
-
-    
-
-} 
+        public enum Color {             // Esse subprograma define a cor de um texto em espeifico usando o codigo Color.[nome da cor em ingles em capsLock], e no final da palavra ou texto se usa o Color.RESET
+        RESET("\u001B[0m"),
+        BLACK("\u001B[30m"),
+        RED("\u001B[31m"),
+        GREEN("\u001B[32m"),
+        YELLOW("\u001B[33m"),
+        BLUE("\u001B[34m"),
+        PURPLE("\u001B[35m"),
+        CYAN("\u001B[36m"),
+        WHITE("\u001B[37m");
+        
+        private final String code;
+        
+        Color(String code) {
+            this.code = code;
+        }
+    } 
+}
