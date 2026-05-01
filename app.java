@@ -197,8 +197,8 @@ public class app {
             String[] nomeProduto = new String[numLinhas];
             String[] quantidade = new String[numLinhas];
             String[] qualidade = new String[numLinhas];
-            String[] preco = new String[numLinhas];
-            leExtraiCsvFicheiro(nomeFicheiro, nomeProduto, quantidade, qualidade, preco);
+            String[] precoF = new String[numLinhas];
+            leExtraiCsvFicheiro(nomeFicheiro, nomeProduto, quantidade, qualidade, precoF);
             System.out.println("\n╔════════════════════════════════════╗");
             System.out.println("║       PRODUTOS DISPONÍVEIS         ║");
             System.out.println("╠════════════════════════════════════╣");
@@ -207,7 +207,7 @@ public class app {
                System.out.printf("║ %d - %-30s ║\n", i + 1, nomeProduto[i]);
                System.out.printf("║     Quantidade: %-20s ║\n", quantidade[i]);
                System.out.printf("║     Qualidade: %-21s ║\n", qualidade[i]);
-               System.out.printf("║     Preço: R$%-23s ║\n", preco[i]);
+               System.out.printf("║     Preço: R$%-23s ║\n", precoF[i]);
                System.out.println("║────────────────────────────────║");
             }
 
@@ -260,7 +260,7 @@ public class app {
                      System.out.print("Nova qualidade: ");
                      qualidade[indiceArray] = sc.nextLine();
                      System.out.print("Novo preço: ");
-                     preco[indiceArray] = sc.nextLine();
+                     precoF[indiceArray] = sc.nextLine();
                      break;
                   default:
                      System.out.println("Opção inválida!");
@@ -270,7 +270,7 @@ public class app {
                String novoConteudo = "";
 
                for(int i = 0; i < nomeProduto.length; ++i) {
-                  novoConteudo = novoConteudo + nomeProduto[i] + "," + quantidade[i] + "," + qualidade[i] + "," + preco[i];
+                  novoConteudo = novoConteudo + nomeProduto[i] + "," + quantidade[i] + "," + qualidade[i] + "," + precoF[i];
                   if (i < nomeProduto.length - 1) {
                      novoConteudo = novoConteudo + "\n";
                   }
