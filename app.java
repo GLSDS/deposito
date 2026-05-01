@@ -288,7 +288,7 @@ public static void main(String[] args) {                            // MPrograma
     escreveNoFicheiro(novoConteudo, nomeFicheiro);
     System.out.println("\n✅ Produto editado com sucesso!");
 }
-private static void adicionarMaisProdutos() {
+private static void adicionarMaisProdutos() {                   //subprograma que permite adicionar mais produtos ao ficheiro sem apagar os produtos já existentes, perguntando ao usuário quantos produtos deseja adicionar e repetindo o processo de adição para cada produto
     Scanner sc = new Scanner(System.in);
     System.out.print("Quantos produtos deseja adicionar? ");
     int quantidade = sc.nextInt();
@@ -305,46 +305,15 @@ private static void adicionarMaisProdutos() {
         System.out.print("Preço: ");
         String preco = sc.nextLine();
         
-        String deposito = nomeProduto + "," + quantidadeProd + "," + qualidade + "," + preco;
+        int precoNum = Integer.parseInt(preco) * Integer.parseInt(quantidadeProd);
+        String precoF = Integer.toString(precoNum);
+        System.out.println("Valor final do produto: " + precoNum);
+        String deposito = nomeProduto + "," + quantidadeProd + "," + qualidade + "," + precoF;
         adicionaTextoAoFicheiro(deposito + "\n", "deposito.txt");
     }
     System.out.println(quantidade + " produto(s) adicionado(s) com sucesso!");
 }
-     /*********************************************************************************/
-private static boolean produtos(){
-
-                Scanner sc = new Scanner(System.in);
-                System.out.println("╔════════════════════════════╗ \n"                  //Tabela das opções dos produtos
-                                  +"║      SELECIONE UMA OPÇÃO   ║ \n"
-                                  +"╠════════════════════════════╣ \n"
-                                  +"║ 1 - Adicionar produto      ║ \n"
-                                  +"║ 2 - Mostrar produtos       ║ \n"
-                                  +"║ 3 - Adicionar mais produtos║ \n"
-                                  +"║ 4 - Editar produto         ║ \n"
-                                  +"║ 5 - Sair                   ║ \n"
-                                  +"╚════════════════════════════╝ ");
-                int opcaoProdutos = sc.nextInt();
-                switch(opcaoProdutos){
-                    case 1 -> adicionarNovoproduto();
-                    case 2 -> mostrarTodosProdutos();
-                    case 3 -> adicionarMaisProdutos();
-                    case 4 -> editarProduto();
-                    case 5 -> {   
-                        return true;
-                    }
-                    default -> System.out.println("Opção inválida");
-                }
-                return false;
-        }
-
-    private static void adicionaTextoAoFicheiro(String deposito, String nomeFicheiro) { 
-        String textoAntigo = leFicheiro(nomeFicheiro); 
-        String textoNovo = textoAntigo + deposito; 
-        escreveNoFicheiro(textoNovo, nomeFicheiro); 
-
-    } 
-
-    private static void adicionarNovoproduto() { 
+private static void adicionarNovoproduto() { 
 
         Scanner sc = new Scanner(System.in); 
 
@@ -369,5 +338,95 @@ private static boolean produtos(){
         adicionaTextoAoFicheiro(deposito, "deposito.txt"); 
 
     } 
+                private static void venderProduto() {
+        Scanner sc = new Scanner(System.in);
+
+}
+private static void atualizarEstoque(String nomeProdutoVenda, int quantidadeVendida) {
+    String nomeFicheiro = "deposito.txt";
+    
+    int numLinhas = getNumeroLinhasFicheiro(nomeFicheiro);
+    
+    if (numLinhas == 0) {
+        System.out.println("❌ Não existem produtos cadastrados!");
+        return;
+    }
+    
+    String[] nomeProduto = new String[numLinhas];
+    String[] quantidade = new String[numLinhas];
+    String[] qualidade = new String[numLinhas];
+    String[] preco = new String[numLinhas];
+    
+    leExtraiCsvFicheiro(nomeFicheiro, nomeProduto, quantidade, qualidade, preco);
+    
+    boolean encontrado = false;
+    
+    for (int i = 0; i < nomeProduto.length; i++) {
+        if (nomeProduto[i].equalsIgnoreCase(nomeProdutoVenda)) {
+            encontrado = true;
+            int qtdAtual = Integer.parseInt(quantidade[i]);
+            
+            if (qtdAtual >= quantidadeVendida) {
+                int novaQtd = qtdAtual - quantidadeVendida;
+                quantidade[i] = String.valueOf(novaQtd);
+                System.out.println("✅ Venda registrada! Novo estoque de " + nomeProduto[i] + ": " + novaQtd + " unidades");
+                
+                // Salvar alterações
+                String novoConteudo = "";
+                for (int j = 0; j < nomeProduto.length; j++) {
+                    novoConteudo += nomeProduto[j] + "," + quantidade[j] + "," + qualidade[j] + "," + preco[j];
+                    if (j < nomeProduto.length - 1) {
+                        novoConteudo += "\n";
+                    }
+                }
+                escreveNoFicheiro(novoConteudo, nomeFicheiro);
+            } else {
+                System.out.println("❌ Estoque insuficiente! Disponível: " + qtdAtual + " unidades");
+            }
+            break;
+        }
+    }
+    
+    if (!encontrado) {
+        System.out.println("❌ Produto não encontrado!");
+    }
+}
+     /*********************************************************************************/
+private static boolean produtos(){
+
+                Scanner sc = new Scanner(System.in);
+                System.out.println("╔════════════════════════════╗ \n"                  //Tabela das opções dos produtos
+                                  +"║      SELECIONE UMA OPÇÃO   ║ \n"
+                                  +"╠════════════════════════════╣ \n"
+                                  +"║ 1 - Adicionar produto      ║ \n"
+                                  +"║ 2 - Vender produto         ║ \n"
+                                  +"║ 3 - Mostrar produtos       ║ \n"
+                                  +"║ 4 - Adicionar mais produtos║ \n"
+                                  +"║ 5 - Editar produto         ║ \n"
+                                  +"║ 6 - Sair                   ║ \n"
+                                  +"╚════════════════════════════╝ ");
+                int opcaoProdutos = sc.nextInt();
+                switch(opcaoProdutos){
+                    case 1 -> adicionarNovoproduto();
+                   // case 2 -> 
+                    case 3 -> mostrarTodosProdutos();
+                    case 4 -> adicionarMaisProdutos();
+                    case 5 ->editarProduto();
+                    case 6 -> {   
+                        return true;
+                    }
+                    default -> System.out.println("Opção inválida");
+                }
+                return false;
+        }
+
+    private static void adicionaTextoAoFicheiro(String deposito, String nomeFicheiro) { 
+        String textoAntigo = leFicheiro(nomeFicheiro); 
+        String textoNovo = textoAntigo + deposito; 
+        escreveNoFicheiro(textoNovo, nomeFicheiro); 
+
+    } 
+
+    
 
 } 
