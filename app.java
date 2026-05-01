@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 public class app {
 
-public static void main(String[] args) {                            // MPrograma pricipal (menu principal; [onde o usuario interage com o programa e escolhe as opções para aceder às funcionalidades do programa])
+public static void main(String[] args) {                            // Programa pricipal (menu principal; [onde o usuario interage com o programa e escolhe as opções para aceder às funcionalidades do programa])
         Scanner sc = new Scanner(System.in); 
         while(true){ 
             System.out.println("╔════════════════════════════╗");
@@ -127,6 +127,16 @@ public static void main(String[] args) {                            // MPrograma
         return numeroLinhas; 
     } 
 
+     /*******************************Subprogramas de vendas*******************************/
+    private static void venderProduto() {
+        Scanner sc = new Scanner(System.in);
+        
+        switch (sc.nextInt()) {
+            //case 1 -> 
+            //case 2 -> registrarVenda();
+            default -> System.out.println(Color.Red + "Opção inválida" + Color.RESET);
+        }
+}
      /*****************************Subprogramas dos produtos*****************************/
     private static void extraiDadosCsv(String[] nomeProduto,                        //subprograma que extrai os dados do ficheiro csv e armazena em arrays separados para cada campo
             String[] quantidade, 
@@ -287,7 +297,7 @@ public static void main(String[] args) {                            // MPrograma
     System.out.println("\n✅ Produto editado com sucesso!");
 }
 
-private static void adicionarMaisProdutos() {                   //subprograma que permite adicionar mais produtos ao ficheiro sem apagar os produtos já existentes, perguntando ao usuário quantos produtos deseja adicionar e repetindo o processo de adição para cada produto
+    private static void adicionarMaisProdutos() {                   //subprograma que permite adicionar mais produtos ao ficheiro sem apagar os produtos já existentes, perguntando ao usuário quantos produtos deseja adicionar e repetindo o processo de adição para cada produto
     Scanner sc = new Scanner(System.in);
     System.out.print("Quantos produtos deseja adicionar? ");
     int quantidade = sc.nextInt();
@@ -313,7 +323,7 @@ private static void adicionarMaisProdutos() {                   //subprograma qu
     System.out.println(quantidade + " produto(s) adicionado(s) com sucesso!");
 }
 
-private static void registarNovoproduto() { 
+    private static void registarNovoproduto() { 
         Scanner sc = new Scanner(System.in); 
 
   
@@ -337,11 +347,9 @@ private static void registarNovoproduto() {
         adicionaTextoAoFicheiro(deposito, "deposito.txt"); 
 
     } 
-                private static void venderProduto() {
-        Scanner sc = new Scanner(System.in);
-        
-
-}
+                
+    
+    
     private static void buscarProdutoPorNome() {
     Scanner sc = new Scanner(System.in);
     String nomeFicheiro = "deposito.txt";
