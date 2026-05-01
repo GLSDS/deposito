@@ -77,7 +77,7 @@ public static void main(String[] args) {                            // Programa 
         return textoLido; 
     } 
 
-    private static String leExtraiCsvFicheiro(String nomeFicheiro,                  //subprograma que lê o ficheiro csv e extrai os dados para arrays separados para cada campo
+    private static String leExtraiCsvProduto(String nomeFicheiro,                  //subprograma que lê o ficheiro csv e extrai os dados para arrays separados para cada campo
             String[] nomeProduto, 
             String[] quantidade, 
             String[] qualidade, 
@@ -104,6 +104,32 @@ public static void main(String[] args) {                            // Programa 
         return textoLido; 
     } 
 
+    private static String leExtraiCsvendas(String ,                  //subprograma que lê o ficheiro csv e extrai os dados para arrays separados para cada campo
+            String[] nomeProduto, 
+            String[] quantidadeFatura, 
+            String[] qualidade, 
+            String[] vendaDevolucao) { 
+
+        FileReader fileReader = null; 
+        String textoLido = ""; 
+        try { 
+            fileReader = new FileReader(new File(nomeFatura)); 
+            BufferedReader bufferedReader = new BufferedReader(fileReader); 
+            String linha = ""; 
+            int numeroLinha = 0; 
+            while ((linha = bufferedReader.readLine()) != null) { 
+                extraiDadosCsv(nomeProduto, quantidadeFatura, qualidade, vendaDevolucao, numeroLinha, linha); 
+                numeroLinha++; 
+            } 
+            bufferedReader.close(); 
+            fileReader.close(); 
+        } catch (FileNotFoundException ex) { 
+            escreveNoFicheiro("", nomeFatura); 
+        } catch (IOException ex) { 
+            Logger.getLogger(app.class.getName()).log(Level.SEVERE, null, ex); 
+        } 
+        return textoLido; 
+    } 
     private static int getNumeroLinhasFicheiro(String nomeFicheiro) {               //Mostra o número de linhas do ficheiro, para ser usado na criação dos arrays com o tamanho correto para armazenar os dados dos produtos
 
         FileReader fileReader = null; 
@@ -128,14 +154,115 @@ public static void main(String[] args) {                            // Programa 
     } 
 
      /*******************************Subprogramas de vendas*******************************/
-    private static void venderProduto() {
+        private static boolean vendas() {
         Scanner sc = new Scanner(System.in);
-        
+         System.out.println("╔═════════════════════════════╗ \n"                  //Tabela das opções das vendas
+                           +"║     SELECIONE UMA OPÇÃO     ║ \n"
+                           +"╠═════════════════════════════╣ \n"
+                           +"║ 1 - Vender produto          ║ \n"
+                           +"║ 2 - Mostrar faturas         ║ \n"
+                           +"║ 3 - Devolução de vendas     ║ \n"
+                           +"║ 4 - Procurar fatura         ║ \n"
+                           +"║ 5 - Sair                    ║ \n"
+                           +"╚═════════════════════════════╝ ");
         switch (sc.nextInt()) {
-            //case 1 -> 
-            //case 2 -> registrarVenda();
-            default -> System.out.println(Color.Red + "Opção inválida" + Color.RESET);
+            case 1 ->  mostrarFaturas();
+            //case 2 -> most();
+            case 4 -> buscarProdutoVenda();
+            default -> System.out.println(Color.RED + "Opção inválida" + Color.RESET);
         }
+}
+        
+        private static void venderProduto() {
+
+            Scanner sc = new Scanner(System.in);
+        System.out.println("Introduza o nome do produto"); 
+        String nomeProduto = sc.nextLine(); 
+        System.out.println("Introduza o quantidade"); 
+        String quantidade = sc.nextLine(); 
+        
+
+        int precoNum = Integer.parseInt(preco) * Integer.parseInt(quantidade);              //calcula o preço total do produto multiplicando o preço unitário pela quantidade
+        String precoF = Integer.toString(precoNum);                                         //converte o preço total de volta para string para ser armazenado no ficheiro
+        System.out.println("Valor final do produto: " + precoNum);
+        System.out.println("Produto adicionado com sucesso!");
+
+        String deposito = nomeProduto + (",") + quantidade + (",") + qualidade + (",") + precoF + "\n"; 
+
+        adicionaTextoAoFicheiro(deposito, "deposito.txt"); 
+        }
+
+         private static void mostrarFaturas() {
+        Scanner sc = new Scanner(System.in); 
+        String nomeFicheiro = "vendas.txt"; 
+
+        String nomeFatura[] = new String[getNumeroLinhasFicheiro(nomeFicheiro)]; 
+        String quantidadeFatura[] = new String[getNumeroLinhasFicheiro(nomeFicheiro)]; 
+        String preco[] = new String[getNumeroLinhasFicheiro(nomeFicheiro)]; 
+        String vendaDevolucao [] = new String[getNumeroLinhasFicheiro(nomeFicheiro)];
+        leExtraiCsvFicheiro(nomeFicheiro, nomeFatura, quantidadeFatura, preco, vendaDevolucao); 
+
+        for (int i = 0; i < nomeFatura.length; i++) { 
+            System.out.println("nome da fatura: " + nomeFatura[i]); 
+            System.out.println("Quantidade: " + quantidadeFatura[i]);  
+            System.out.println("Preço: " + preco[i] + "\n");
+            sout 
+        } 
+    }
+    private static void buscarProdutoVenda() {
+    Scanner sc = new Scanner(System.in);
+    String nomeFicheiro = "deposito.txt";
+    
+    int numLinhas = getNumeroLinhasFicheiro(nomeFicheiro);
+    
+    if (numLinhas == 0) {
+        System.out.println("❌ Não existem produtos cadastrados!");
+        return;
+    }
+    
+    String[] nomeProduto = new String[numLinhas];
+    String[] quantidade = new String[numLinhas];
+    String[] qualidade = new String[numLinhas];
+    String[] preco = new String[numLinhas];
+    
+    leExtraiCsvFicheiro(nomeFicheiro, nomeProduto, quantidade, qualidade, preco);
+    
+    System.out.println("Introduza o nome do produto para vender:\n");
+    String nomeBusca = sc.nextLine().toLowerCase();
+    
+    boolean encontrado = false;
+    int contador = 0;
+    
+    System.out.println("\n╔════════════════════════════════════════════════╗");
+    System.out.println("║           RESULTADOS DA BUSCA                  ║");
+    System.out.println("╠════════════════════════════════════════════════╣");
+    
+    for (int i = 0; i < nomeProduto.length; i++) {
+        if (nomeProduto[i].toLowerCase().contains(nomeBusca)) {
+            encontrado = true;
+            contador++;
+            int qtd = Integer.parseInt(quantidade[i]);
+            String status = (qtd > 0) ? "✅ DISPONÍVEL" : "❌ INDISPONÍVEL";
+            
+            System.out.println("║ [" + contador + "] " + nomeProduto[i]);
+            System.out.println("║     Quantidade: " + quantidade[i] + " unidades");
+            System.out.println("║     Status: " + status);
+            System.out.println("║     Preço: R$ " + preco[i]);
+            System.out.println("║     Qualidade: " + qualidade[i]);
+            
+            if (qtd > 0 && qtd < 5) {
+                System.out.println("║     ⚠️  ESTOQUE BAIXO! Restam apenas " + qtd + " unidades");
+            }
+            System.out.println("║────────────────────────────────────────────║");
+        }
+    }
+    
+    if (!encontrado) {
+        System.out.println("║     Nenhum produto encontrado com o nome: " + Color.RED + nomeBusca + Color.RESET);
+    } else {
+        System.out.println("║    📊 Total de produtos encontrados: " + contador);
+    }
+    System.out.println("╚════════════════════════════════════════════════╝");
 }
      /*****************************Subprogramas dos produtos*****************************/
     private static void extraiDadosCsv(String[] nomeProduto,                        //subprograma que extrai os dados do ficheiro csv e armazena em arrays separados para cada campo
@@ -182,7 +309,8 @@ public static void main(String[] args) {                            // Programa 
             System.out.println("Quantidade: " + quantidade[i]); 
             System.out.println("Qualidade: " + qualidade[i]); 
             System.out.println("Preço: " + preco[i] + "\n"); 
-        } 
+        }
+         
     } 
 
     private static void editarProduto() {
@@ -348,8 +476,6 @@ public static void main(String[] args) {                            // Programa 
 
     } 
                 
-    
-    
     private static void buscarProdutoPorNome() {
     Scanner sc = new Scanner(System.in);
     String nomeFicheiro = "deposito.txt";
@@ -406,7 +532,7 @@ public static void main(String[] args) {                            // Programa 
     System.out.println("╚════════════════════════════════════════════════╝");
 }
 
-private static void atualizarEstoque(String nomeProdutoVenda, int quantidadeVendida) {
+    private static void atualizarEstoque(String nomeProdutoVenda, int quantidadeVendida) {
     String nomeFicheiro = "deposito.txt";
     
     int numLinhas = getNumeroLinhasFicheiro(nomeFicheiro);
@@ -456,7 +582,7 @@ private static void atualizarEstoque(String nomeProdutoVenda, int quantidadeVend
     }
 }
      /*********************************************************************************/
-private static boolean produtos(){
+    private static boolean produtos(){
 
                 Scanner sc = new Scanner(System.in);
                 System.out.println("╔════════════════════════════╗ \n"                  //Tabela das opções dos produtos
