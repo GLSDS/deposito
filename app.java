@@ -494,15 +494,15 @@ public class app {
     
     private static boolean produtos() {
         Scanner sc = new Scanner(System.in);
-        System.out.println(Color.BRIGHT_CYAN + "\n╔════════════════════════════════════╗" + Color.RESET);
-        System.out.println(Color.BRIGHT_YELLOW + "║           MENU DE PRODUTOS         ║" + Color.RESET);
-        System.out.println(Color.BRIGHT_CYAN +   "╠════════════════════════════════════╣" + Color.RESET);
+        System.out.println(Color.BRIGHT_GREEN + "\n╔════════════════════════════════════╗" + Color.RESET);
+        System.out.println(Color.BRIGHT_GREEN + "║           MENU DE PRODUTOS         ║" + Color.RESET);
+        System.out.println(Color.BRIGHT_GREEN +   "╠════════════════════════════════════╣" + Color.RESET);
         System.out.println(Color.GREEN +         "║ 1 - Registrar produto              ║" + Color.RESET);
         System.out.println(Color.GREEN +         "║ 2 - Mostrar produtos               ║" + Color.RESET);
         System.out.println(Color.GREEN +         "║ 3 - Adicionar mais produtos        ║" + Color.RESET);
         System.out.println(Color.GREEN +         "║ 4 - Editar produto                 ║" + Color.RESET);
-        System.out.println(Color.RED +           "║ 5 - Sair                           ║" + Color.RESET);
-        System.out.println(Color.BRIGHT_CYAN +   "╚════════════════════════════════════╝" + Color.RESET);
+        System.out.println(Color.GREEN +           "║" + Color.RED + " 5 - Sair "+ Color.GREEN"                          ║" + Color.RESET);
+        System.out.println(Color.GREEN +   "╚════════════════════════════════════╝" + Color.RESET);
         System.out.print(Color.YELLOW +         "Opção: " + Color.RESET);
         
         int opcaoProdutos = sc.nextInt();
